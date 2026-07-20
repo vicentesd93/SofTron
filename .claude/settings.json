@@ -219,6 +219,45 @@
       "topology": "hierarchical-mesh",
       "maxAgents": 15
     },
+    "gitflow": {
+      "enabled": true,
+      "remote": "https://github.com/vicentesd93/SofTron",
+      "protectedBranches": [
+        "main"
+      ],
+      "defaultPrBase": "develop",
+      "promotionPath": [
+        "feature/*",
+        "develop",
+        "demo",
+        "uat",
+        "main"
+      ],
+      "branchRoles": {
+        "main": {
+          "environment": "production",
+          "directCommits": false,
+          "mergeFrom": [
+            "uat"
+          ]
+        },
+        "develop": {
+          "environment": "development",
+          "role": "stable integration branch for implementation agents",
+          "featurePrefix": "feature/"
+        },
+        "demo": {
+          "environment": "qa",
+          "role": "tester validation"
+        },
+        "uat": {
+          "environment": "staging",
+          "role": "manual acceptance before production"
+        }
+      },
+      "hotfixPrefix": "hotfix/",
+      "releasePrefix": "release/"
+    },
     "memory": {
       "backend": "hybrid",
       "enableHNSW": true,

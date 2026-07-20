@@ -142,6 +142,30 @@ npx @claude-flow/cli@latest hooks worker dispatch --trigger audit
 
 Any string works as a custom agent type.
 
+## Git & Branch Strategy (Gitflow)
+
+Remote: `https://github.com/vicentesd93/SofTron`
+
+Persistent branches and their role — **every agent MUST respect this mapping**:
+
+| Branch | Environment / Role | Who works here |
+|--------|--------------------|----------------|
+| `main` | Production. Release-only, always stable. | Nobody directly — only PR merges from `uat`. |
+| `develop` | Stable integration branch. Base of all `feature/*`. | Implementation agents (`coder`, `system-architect`, `backend-dev`, `reviewer`…). |
+| `demo` | QA validation of what is integrated in `develop`. | Tester agents (`tester`, `tdd-london-swarm`, `production-validator`). |
+| `uat` | Manual acceptance testing before production. | Manual validation (human-driven). |
+
+### Rules for agents (hard constraints)
+
+- **NEVER commit or push directly to `main`.** No exceptions. `main` only receives PR merges from `uat`.
+- Implementation happens on `feature/<name>` branched from `develop`, and merges back into `develop` via PR.
+- **Default PR base branch = `develop`**, never `main`.
+- Promotion is forward-only, never skip a stage: `feature/* → develop → demo → uat → main`.
+- Tester agents operate on `demo`; never push test scaffolding into `develop` or `main`.
+- Hotfixes: `hotfix/<name>` from `main`, merged into **both** `main` and `develop`.
+- Releases: `release/<version>` from `develop`.
+- Before starting work, confirm the branch explicitly (`git switch develop` or create a `feature/*`). Never assume the current branch is correct.
+
 ## Build & Test
 
 - ALWAYS run tests after code changes
